@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <textarea required class="field" maxlength="100" minlength="1" name="content">${comment.comment}</textarea>
                         </label>
                         <div class="button-container" style="display: flex" style="flex-direction: row">
-                            <button class="--obj-button -button_color" type="submit">댓글 수정</button>
+                            <button class="--obj-button -button_color" type="submit">수정</button>
                             <button type="button" class="--obj-button -light cancel-button">취소</button>
                         </div>
                         </form>
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </label>
                         <form class="form reply">
                         <div class="button-container" style="display: flex" style="flex-direction: row">
-                            <button class="--obj-button -button_color" type="submit">답글 쓰기</button>
+                            <button class="--obj-button -button_color" type="submit">답글쓰기</button>
                             <button type="button" class="--obj-button -light cancel-button">취소</button>
                         </div>
                         </form>
@@ -154,6 +154,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     $modifyButton.className = 'action';
                     $modifyButton.textContent = '수정';
                     $modifyButton.addEventListener('click', () => {
+                        // Hide any visible forms
+                        document.querySelectorAll('.form').forEach(form => form.style.display = 'none');
+                        document.querySelectorAll('.content').forEach(content => content.style.display = 'block');
+                        document.querySelectorAll('.action-container').forEach(container => container.style.display = 'flex');
+
                         $modifyForm.style.display = 'block';
                         $contentDiv.style.display = 'none'; // 기존 댓글 숨기기
                         $actionContainer.style.display = 'none'; // 액션 버튼 숨기기
@@ -172,8 +177,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     $replyButton.className = 'action';
                     $replyButton.textContent = '답글 쓰기';
                     $replyButton.addEventListener('click', () => {
-                        // Hide any visible reply forms
-                        document.querySelectorAll('.form.reply').forEach(form => form.style.display = 'none');
+                        // Hide any visible forms
+                        document.querySelectorAll('.form').forEach(form => form.style.display = 'none');
+                        document.querySelectorAll('.content').forEach(content => content.style.display = 'block');
+                        document.querySelectorAll('.action-container').forEach(container => container.style.display = 'flex');
+
                         $replyForm.style.display = 'block';
                         $actionContainer.style.display = 'none'; // 액션 버튼 숨기기
                         $replyForm.querySelector('textarea').focus();

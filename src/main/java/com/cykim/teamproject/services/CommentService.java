@@ -37,8 +37,7 @@ public class CommentService {
 
 
     /// //////////////////////////////////////////////////////////////
-
-    // 댓글 삭제 기능
+    ///
     public DeleteCommentResult deleteComment(int index) {
         if (index < 1) {
             return DeleteCommentResult.FAILURE; // 유효하지 않은 index
@@ -51,9 +50,16 @@ public class CommentService {
             return DeleteCommentResult.FAILURE; // 이미 삭제된 댓글
         }
         comment.setIsDeleted(LocalDateTime.now()); // 삭제 시간 설정
-        return this.commentMapper.updateComment(comment) > 0
-                ? DeleteCommentResult.SUCCESS // 성공적으로 업데이트됨
-                : DeleteCommentResult.FAILURE; // 업데이트 실패
+        int updateCount = this.commentMapper.updateComment(comment);
+
+        // 대댓글 가져와서 업데이트
+        CommentEntity[] replies = this.commentMapper.selectRepliesByParentId(index);
+        for (CommentEntity reply : replies) {
+            reply.setIsDeleted(LocalDateTime.now());
+            updateCount += this.commentMapper.updateComment(reply);
+        }
+
+        return updateCount > 0 ? DeleteCommentResult.SUCCESS : DeleteCommentResult.FAILURE;
     }
 
     // 댓글 불러오기 기능
