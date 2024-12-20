@@ -82,5 +82,15 @@ h1, h2, h3, h4, h5, h6 {
 .--obj-button.-button_color:active {
   background-color: rgb(172.4675324675, 156.4935064935, 132.5324675325);
 }
+.--obj-button.-primary_color {
+  background-color: #c1b5a3;
+  color: #ffffff;
+}
+.--obj-button.-primary_color:hover {
+  background-color: rgb(182.7337662338, 168.7467532468, 147.7662337662);
+}
+.--obj-button.-primary_color:active {
+  background-color: rgb(172.4675324675, 156.4935064935, 132.5324675325);
+}
 
-/*# sourceMappingURL=common.css.map */
+/*# sourceMappingURL=common_cy.css.map */

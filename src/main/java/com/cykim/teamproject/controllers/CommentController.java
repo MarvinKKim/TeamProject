@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/comment")
@@ -25,7 +22,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    ///  ////////////////////////////////
+
 
     @RequestMapping(value = "/", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -39,7 +36,7 @@ public class CommentController {
         return response.toString();
     }
 
-    ///  //////////////////////////////
+
 
     // 댓글 삭제 기능
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,5 +67,25 @@ public class CommentController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(comments);
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity<String> replyComment(@RequestParam int parentCommentId, @RequestParam String content) {
+        ArticleResult result = commentService.saveReplyComment(parentCommentId, content);
+        if (result == ArticleResult.SUCCESS) {
+            return ResponseEntity.ok("Reply comment added successfully");
+        } else {
+            return ResponseEntity.status(400).body("Failed to add reply comment");
+        }
+    }
+
+    // 대댓글 불러오기 엔드포인트
+    @GetMapping("/replies")
+    public ResponseEntity<CommentEntity[]> getReplies(@RequestParam int parentCommentId) {
+        CommentEntity[] replies = commentService.getRepliesByParentId(parentCommentId);
+        if (replies == null || replies.length == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(replies);
     }
 }

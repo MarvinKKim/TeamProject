@@ -13,4 +13,7 @@ public interface CommentMapper {
     int updateComment(CommentEntity comment);
 
     CommentEntity selectCommentByIndex(@Param("index") int index);
+
+    // 대댓글 불러오기
+    CommentEntity[] selectRepliesByParentId(@Param("parentCommentId") int parentCommentId);
 }

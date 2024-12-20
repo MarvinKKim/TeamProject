@@ -82,4 +82,32 @@ public class CommentService {
         comment.setUserNickname("관리자");
         return commentMapper.insertComment(comment) > 0 ? ArticleResult.SUCCESS : ArticleResult.FAILURE;
     }
+
+    /// ////////////////////////////////////
+    public ArticleResult saveReplyComment(int parentCommentId, String content) {
+        if (parentCommentId < 1 || content == null || content.isEmpty() || content.length() > 100) {
+            return ArticleResult.FAILURE;
+        }
+        CommentEntity parentComment = this.commentMapper.selectCommentByIndex(parentCommentId);
+        if (parentComment == null || parentComment.getIsDeleted() != null) {
+            return ArticleResult.FAILURE;
+        }
+        CommentEntity replyComment = new CommentEntity();
+        replyComment.setPostId(parentComment.getPostId());
+        replyComment.setCommentId(parentCommentId);
+        replyComment.setComment(content);
+        replyComment.setCreatedAt(LocalDateTime.now());
+        replyComment.setUpdateAt(null);
+        replyComment.setIsDeleted(null);
+        replyComment.setUserEmail("yellow6480@gmail.com");
+        replyComment.setUserNickname("관리자");
+        return this.commentMapper.insertComment(replyComment) > 0 ? ArticleResult.SUCCESS : ArticleResult.FAILURE;
+    }
+
+    public CommentEntity[] getRepliesByParentId(int parentCommentId) {
+        if (parentCommentId < 1) {
+            return new CommentEntity[0];
+        }
+        return this.commentMapper.selectRepliesByParentId(parentCommentId);
+    }
 }

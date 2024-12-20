@@ -158,8 +158,8 @@ public class ArticleService {
         article.setDeletedAt(null);
 //        article.setUserEmail("yellow6480@gmail.com");
 //        article.setUserNickname("관리자");
-        article.setUserEmail("test1234@example.com");
-        article.setUserNickname("이탈리아의수도는로마");
+        article.setUserEmail("yellow077@naver.com");
+        article.setUserNickname("김두루미");
 
 
         return this.articleMapper.insertArticle(article) > 0

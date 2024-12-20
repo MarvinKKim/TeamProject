@@ -40,6 +40,20 @@
           AND `is_deleted` IS NULL
     </select>
 
+    <select id="selectRepliesByParentId" resultType="com.cykim.teamproject.entities.CommentEntity">
+        SELECT `index`         AS `index`,
+               `post_id`       AS `postId`,
+               `comment_id`    AS `commentId`,
+               `comment`       AS `comment`,
+               `user_email`    AS `userEmail`,
+               `user_nickname` AS `userNickname`,
+               `create_at`     AS `createdAt`,
+               `update_at`     AS `updateAt`,
+               `is_deleted`    AS `isDeleted`
+        FROM `fave`.`board_comments`
+        WHERE `comment_id` = #{parentCommentId}
+          AND `is_deleted` IS NULL
+    </select>
 
     <update id="updateComment" parameterType="com.cykim.teamproject.entities.CommentEntity">
         UPDATE `fave`.`board_comments`

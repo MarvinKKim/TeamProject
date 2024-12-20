@@ -214,16 +214,6 @@ $border-color: #ddd;
       margin-right: 0.8rem;
     }
   }
-
-  //.button_list {
-  //  display: flex;
-  //  align-items: center; /* 수직으로 중앙 정렬 */
-  //  justify-content: center; /* 수평으로 중앙 정렬 */
-  //  gap: 1rem;
-  //  width: 100%;
-  //  margin: 0 auto;
-  //
-  //}
 }
 
 #deleteDialog {
@@ -327,7 +317,7 @@ $border-color: #ddd;
         }
 
         > .field {
-          border-color: darken($border_color, 10%);
+          border-color: darken($primary-color, 10%);
         }
       }
 
@@ -337,7 +327,8 @@ $border-color: #ddd;
         }
 
         > .field {
-          border-color: #387aeb;
+          border-color: $primary-color;
+          height: 5rem;
         }
       }
 
@@ -351,6 +342,7 @@ $border-color: #ddd;
         border: 0.0625rem solid $border_color;
         border-radius: 0.25rem;
         padding: 0.425rem 0.5rem;
+        height: 5rem;
 
         &[name="content"] {
           flex-grow: 1;
@@ -373,6 +365,7 @@ $border-color: #ddd;
 
     > .--obj-button {
       margin-top: 1rem;
+      background-color: inherit;
     }
   }
 
@@ -486,3 +479,4 @@ $border-color: #ddd;
     }
   }
 }
+
