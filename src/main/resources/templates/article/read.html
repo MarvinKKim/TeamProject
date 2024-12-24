@@ -9,6 +9,7 @@
     <link rel="shortcut icon" th:href="@{'/images/favicon.png'}">
     <link href="/assets/styles/common_cy.css" rel="stylesheet" type="text/css">
     <link href="/article/assets/styles/read.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/assets/scripts/like.js"></script>
     <script type="text/javascript" th:if="${article == null || article.getDeletedAt() != null}">
         alert('존재하지 않는 게시글입니다. 주소를 다시 확인해 주세요.');
         history.back();
@@ -50,9 +51,19 @@
     <div class="container">
         <div class="post">
             <div class="title" th:text="${article.getTitle()}">게시글 제목</div>
-            <a class="meta"
-               th:text="'작성자: ' + ${article.getUserNickname()} + ' | 작성일: ' + ${#temporals.format(article.getCreatedAt, 'yyyy-MM-dd')} + ' | 조회수: ' + ${article.getView()}">>작성자:
-                사용자 | 작성일: 2024-12-06 | 조회수: 123</a>
+            <div class="meta-like-container">
+                <a class="meta"
+                   th:text="'작성자: ' + ${article.getUserNickname()} + ' | 작성일: ' + ${#temporals.format(article.getCreatedAt, 'yyyy-MM-dd')} + ' | 조회수: ' + ${article.getView()}">>작성자:
+                    사용자 | 작성일: 2024-12-06 | 조회수: 123</a>
+                <div class="like-container" data-festival-id="79" data-user-email="yellow077@naver.com">
+                    <button class="like" name="like" type="button">
+                        <img th:src="@{/article/assets/images/like-false.png}" alt="좋아요" class="icon">
+                    </button>
+                    <button class="unlike" name="unlike" type="button">
+                        <img th:src="@{/article/assets/images/like-true.png}" alt="좋아요 취소" class="icon">
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="content">
             <div th:utext="${article.getContent()}">
@@ -61,7 +72,11 @@
         </div>
         <div class="button-container">
             <button name="report" class="button report" type="button" onclick="location.href='#'">신고하기</button>
-            <div class="button_list">
+            <div th:if="${email != article.getUserEmail()}" class="button_list_alone">
+                <a th:href="@{'/board/list'}" target="_self"
+                   class="button_list button back write --obj-button -button_color">목록으로</a>
+            </div>
+            <div th:if="${email == article.getUserEmail()}" class="button_list">
                 <!--    <a class="page prev"-->
                 <!--       th:if="${pageVo.requestPage > pageVo.movableMinPage}"-->
                 <!--       th:href="@{'/article/read' (page=${pageVo.requestPage - 1}, filter=${filter}, keyword=${keyword})}">&lt;</a>-->
@@ -72,8 +87,10 @@
                 <!--       th:href="@{'/article/read' (page=${pageVo.requestPage + 1}, filter=${filter}, keyword=${keyword})}">&gt;</a>-->
             </div>
 <!--            <span class="spring"></span>-->
-            <button name="modify" class="button modify" type="button">수정</button>
-            <button name="delete" class="button delete" type="button">삭제</button>
+            <div th:if="${email == article.getUserEmail()}">
+                <button name="modify" class="button modify" type="button">수정</button>
+                <button name="delete" class="button delete" type="button">삭제</button>
+            </div>
         </div>
         <div class="comments">
             <div class="comment-container">
@@ -90,17 +107,31 @@
 <!--                            </label>-->
                         </div>
                         <div class="content">내용자리</div>
+<!--                        <div class="action-container">-->
+<!--                            <input checked id="commentNoAction0" name="comment0" type="radio" value="noAction">-->
+<!--                            <label class="action">-->
+<!--                                <input name="comment0" type="radio" value="reply">-->
+<!--                                <span class="text">답글 쓰기</span>-->
+<!--                            </label>-->
+<!--                            <label class="action">-->
+<!--                                <input name="comment0" type="radio" value="modify">-->
+<!--                                <span class="text">수정</span>-->
+<!--                            </label>-->
+<!--                            <button class="action" name="delete" type="button">삭제</button>-->
+<!--                        </div>-->
                         <div class="action-container">
                             <input checked id="commentNoAction0" name="comment0" type="radio" value="noAction">
                             <label class="action">
                                 <input name="comment0" type="radio" value="reply">
                                 <span class="text">답글 쓰기</span>
                             </label>
-                            <label class="action">
-                                <input name="comment0" type="radio" value="modify">
-                                <span class="text">수정</span>
-                            </label>
-                            <button class="action" name="delete" type="button" data-comment-id="12345">삭제</button>
+                            <div th:if="${email == article.getUserEmail()}">
+                                <label class="action">
+                                    <input name="comment0" type="radio" value="modify">
+                                    <span class="text">수정</span>
+                                </label>
+                                <button class="action" name="delete" type="button">삭제</button>
+                            </div>
                         </div>
                         <form class="form reply">
                             <label class="label spring">

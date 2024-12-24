@@ -2,22 +2,27 @@ package com.cykim.teamproject.controllers;
 
 import com.cykim.teamproject.entities.ArticleEntity;
 import com.cykim.teamproject.entities.ImageEntity;
+import com.cykim.teamproject.entities.UserEntity;
 import com.cykim.teamproject.results.article.ArticleResult;
 import com.cykim.teamproject.results.article.DeleteArticleResult;
 import com.cykim.teamproject.services.ArticleService;
-import com.cykim.teamproject.vos.PageVo;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping(value = "/article")
@@ -104,11 +109,22 @@ public class ArticleController {
 
     @RequestMapping(value = "/read", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getRead(HttpServletResponse response,
-                                @RequestParam(value = "index", required = false) int index) {
+                                @RequestParam(value = "index", required = false) int index,
+                                @AuthenticationPrincipal UserDetails userDetails){
         ArticleEntity article = articleService.getArticleByIndex(index);
         ModelAndView modelAndView = new ModelAndView();
         if (article != null) {
             articleService.increaseArticleView(article);
+        }
+
+        // 로그인한 사용자 정보를 뷰에 전달
+        if (userDetails instanceof UserEntity user) {
+            modelAndView.addObject("user", user); // user 객체 생성
+            modelAndView.addObject("email", user.getEmail());
+            modelAndView.addObject("now", LocalDateTime.now());
+            modelAndView.addObject("isAdmin", user.isAdmin());
+            modelAndView.addObject("nickname", user.getUsername());
+            modelAndView.addObject("name", user.getNickname());
         }
         modelAndView.setViewName("article/read");
         modelAndView.addObject("article", article);

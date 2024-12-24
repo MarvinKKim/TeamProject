@@ -1,9 +1,8 @@
 package com.cykim.teamproject.controllers;
 
-import com.cykim.teamproject.entities.ArticleEntity;
 import com.cykim.teamproject.services.ArticleService;
 import com.cykim.teamproject.vos.ArticleVo;
-import com.cykim.teamproject.vos.PageVo;
+import com.cykim.teamproject.vos.PageVo_cy;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,7 +30,7 @@ public class BoardController {
             @RequestParam(value = "keyword", required = false) String keyword) {
 
         ModelAndView modelAndView = new ModelAndView();
-        Pair<ArticleVo[], PageVo> articles;
+        Pair<ArticleVo[], PageVo_cy> articles;
 
         if (filter == null || filter.isEmpty() || keyword == null || keyword.isEmpty()) {
             articles = this.articleService.getArticlesByPaging(page);

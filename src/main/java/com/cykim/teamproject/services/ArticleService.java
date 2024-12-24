@@ -2,16 +2,20 @@ package com.cykim.teamproject.services;
 
 import com.cykim.teamproject.entities.ArticleEntity;
 import com.cykim.teamproject.entities.ImageEntity;
+import com.cykim.teamproject.entities.UserEntity;
 import com.cykim.teamproject.mappers.ArticleMapper;
 import com.cykim.teamproject.mappers.ImageMapper;
 import com.cykim.teamproject.results.article.ArticleResult;
 import com.cykim.teamproject.results.article.DeleteArticleResult;
 import com.cykim.teamproject.vos.ArticleVo;
-import com.cykim.teamproject.vos.PageVo;
+import com.cykim.teamproject.vos.PageVo_cy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -26,10 +30,6 @@ public class ArticleService {
         this.imageMapper = imageMapper;
     }
 
-    /****************************************************************************/
-
-
-    /******************************************************************************/
     // 삭제
     public DeleteArticleResult deleteArticle(int index) {
         if (index < 1) {
@@ -85,38 +85,23 @@ public class ArticleService {
         return this.articleMapper.updateArticle(dbArticle) > 0;
     }
 
-//    public Pair<ArticleEntity[], PageVo> searchArticles(String keyword, String filter, int page) {
-//        int totalCount = articleMapper.selectArticleCountBySearch(filter, keyword);
-//        PageVo pageVo = new PageVo(page, totalCount);
-//        ArticleEntity[] articles = articleMapper.selectArticleBySearch(filter, keyword, pageVo.countPerPage, pageVo.offsetCount);
-//        return Pair.of(articles, pageVo);
-//    }
-//
-//    public Pair<ArticleEntity[], PageVo> getArticlesByPaging(int page) {
-//        int totalCount = this.articleMapper.getTotalArticlesCount();
-//        PageVo pageVo = new PageVo(page, totalCount);
-//        ArticleEntity[] articles = this.articleMapper.selectArticlesByPaging(pageVo.offsetCount, pageVo.countPerPage);
-//
-//        return Pair.of(articles, pageVo);
-//    }
-
-    public Pair<ArticleVo[], PageVo> searchArticles(String keyword, String filter, int page) {
+    public Pair<ArticleVo[], PageVo_cy> searchArticles(String keyword, String filter, int page) {
         int totalCount = articleMapper.selectArticleCountBySearch(filter, keyword);
-        PageVo pageVo = new PageVo(page, totalCount);
+        PageVo_cy pageVoCy = new PageVo_cy(page, totalCount);
 
         // 댓글 수를 포함한 게시물 조회
-        ArticleVo[] articles = articleMapper.selectArticleBySearch(filter, keyword, pageVo.countPerPage, pageVo.offsetCount);;
-        return Pair.of(articles, pageVo);
+        ArticleVo[] articles = articleMapper.selectArticleBySearch(filter, keyword, pageVoCy.countPerPage, pageVoCy.offsetCount);;
+        return Pair.of(articles, pageVoCy);
     }
 
-    public Pair<ArticleVo[], PageVo> getArticlesByPaging(int page) {
+    public Pair<ArticleVo[], PageVo_cy> getArticlesByPaging(int page) {
         int totalCount = this.articleMapper.getTotalArticlesCount();
-        PageVo pageVo = new PageVo(page, totalCount);
+        PageVo_cy pageVoCy = new PageVo_cy(page, totalCount);
 
         // 댓글 수를 포함한 페이징된 게시물 조회
-        ArticleVo[] articles = this.articleMapper.selectArticlesByPaging(pageVo.offsetCount, pageVo.countPerPage);
+        ArticleVo[] articles = this.articleMapper.selectArticlesByPaging(pageVoCy.offsetCount, pageVoCy.countPerPage);
 
-        return Pair.of(articles, pageVo);
+        return Pair.of(articles, pageVoCy);
     }
 
 
@@ -153,17 +138,45 @@ public class ArticleService {
             return ArticleResult.FAILURE;
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = null;
+        String userNickname = null;
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserEntity) {
+                UserEntity userEntity = (UserEntity) principal;
+                userEmail = userEntity.getEmail();
+                userNickname = userEntity.getNickname();
+            }
+        }
+
+        System.out.println("userEmail: " + userEmail);
+        System.out.println("userNickname: " + userNickname);
+
+        if (userEmail == null) {
+            System.out.println("Authentication failed. Returning FAILURE.");
+            return ArticleResult.FAILURE;
+        }
+
         article.setCreatedAt(LocalDateTime.now());
-        article.setUpdateAt(null);
-        article.setDeletedAt(null);
-//        article.setUserEmail("yellow6480@gmail.com");
-//        article.setUserNickname("관리자");
-        article.setUserEmail("yellow077@naver.com");
-        article.setUserNickname("김두루미");
+        article.setUserEmail(userEmail);
+        article.setUserNickname(userNickname != null ? userNickname : "익명");
+
+        int result = this.articleMapper.insertArticle(article);
+
+        return result > 0 ? ArticleResult.SUCCESS : ArticleResult.FAILURE;
+//        article.setCreatedAt(LocalDateTime.now());
+//        article.setUpdateAt(null);
+//        article.setDeletedAt(null);
+////        article.setUserEmail("yellow6480@gmail.com");
+////        article.setUserNickname("관리자");
+//        article.setUserEmail("yellow077@naver.com");
+//        article.setUserNickname("김두루미");
 
 
-        return this.articleMapper.insertArticle(article) > 0
-                ? ArticleResult.SUCCESS
-                : ArticleResult.FAILURE;
+//        return this.articleMapper.insertArticle(article) > 0
+//                ? ArticleResult.SUCCESS
+//                : ArticleResult.FAILURE;
     }
 }

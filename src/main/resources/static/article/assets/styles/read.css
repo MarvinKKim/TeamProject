@@ -30,13 +30,60 @@
   background-color: rgb(234.0649350649, 230.012987013, 223.9350649351);
   padding: 1.25rem;
   border-bottom: 0.0625px solid #ddd;
+  display: flex;
+  flex-direction: column;
 }
 .container > .post > .title {
   font-weight: 500;
   font-size: 1.5rem;
   margin-bottom: 10px;
 }
-.container > .post > .meta {
+.container > .post .meta-like-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container > .post .meta-like-container > .like-container {
+  display: flex;
+  margin-left: auto;
+}
+.container > .post .meta-like-container > .like-container.liked .like {
+  display: none;
+}
+.container > .post .meta-like-container > .like-container.liked .unlike {
+  display: block;
+}
+.container > .post .meta-like-container > .like-container .like {
+  cursor: pointer;
+}
+.container > .post .meta-like-container > .like-container .like:hover > .icon {
+  filter: brightness(100%);
+}
+.container > .post .meta-like-container > .like-container .like .icon {
+  width: 1.375rem;
+  filter: brightness(75%);
+  transition-duration: 125ms;
+  transition-property: filter;
+  transition-timing-function: ease;
+}
+.container > .post .meta-like-container > .like-container .unlike {
+  cursor: pointer;
+  display: none;
+}
+.container > .post .meta-like-container > .like-container .unlike:hover {
+  filter: brightness(90%);
+}
+.container > .post .meta-like-container > .like-container .unlike:active {
+  filter: brightness(80%);
+}
+.container > .post .meta-like-container > .like-container .unlike .icon {
+  width: 1.375rem;
+  filter: brightness(100%);
+  transition-duration: 125ms;
+  transition-property: filter;
+  transition-timing-function: ease;
+}
+.container > .post .meta-like-container > .meta {
   font-size: 0.9rem;
   color: gray;
 }
@@ -54,6 +101,10 @@
 .container .button-container .button_list {
   margin-right: auto;
   margin-left: 0.5rem;
+}
+.container .button-container .button_list_alone {
+  justify-content: center;
+  margin-right: 0.4rem;
 }
 .container .button-container .button {
   padding: 0.3rem 0.8rem;
