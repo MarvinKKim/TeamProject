@@ -122,4 +122,52 @@
         SET `deleted_at` = #{deletedAt}
         WHERE `index` = #{index}
     </update>
+
+<!--    &lt;!&ndash; 좋아요 수 증가 &ndash;&gt;-->
+<!--    <update id="incrementLikeCount">-->
+<!--        UPDATE `fave`.`board_posts`-->
+<!--        SET like_count = like_count + 1-->
+<!--        WHERE `index` = #{postId}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 좋아요 수 감소 (추가 요구 시 사용) &ndash;&gt;-->
+<!--    <update id="decrementLikeCount">-->
+<!--        UPDATE `fave`.`board_posts`-->
+<!--        SET like_count = like_count - 1-->
+<!--        WHERE `index` = #{postId}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 게시물 정보 조회 &ndash;&gt;-->
+<!--    <select id="selectPostById" resultType="com.cykim.teamproject.entities.BoardPostEntity">-->
+<!--        SELECT `index`, like_count-->
+<!--        FROM `fave`.`board_posts`-->
+<!--        WHERE `index` = #{postId}-->
+<!--    </select>-->
+
+    <!-- 좋아요 추가 -->
+    <insert id="addLike">
+        INSERT INTO `fave`.`board_likes` (`board_id`, `user_email`)
+        VALUES (#{postId}, #{userEmail})
+    </insert>
+
+    <!-- 좋아요 삭제 -->
+    <delete id="removeLike">
+        DELETE FROM `fave`.`board_likes`
+        WHERE `board_id` = #{postId} AND `user_email` = #{userEmail}
+    </delete>
+
+    <!-- 좋아요 수 증가 -->
+    <update id="incrementLikeCount">
+        UPDATE `fave`.`board_posts`
+        SET like_count = like_count + 1
+        WHERE `index` = #{postId}
+    </update>
+
+    <!-- 좋아요 수 감소 -->
+    <update id="decrementLikeCount">
+        UPDATE `fave`.`board_posts`
+        SET like_count = like_count - 1
+        WHERE `index` = #{postId}
+    </update>
+
 </mapper>

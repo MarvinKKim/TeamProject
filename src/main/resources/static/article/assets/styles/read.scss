@@ -459,3 +459,24 @@ $border-color: #ddd;
   }
 }
 
+$active-color: #f44336;
+$inactive-color: #4CAF50;
+$button-padding: 10px 20px;
+$button-border-radius: 5px;
+
+.favorite-btn {
+  padding: $button-padding;
+  background-color: $inactive-color;
+  color: white;
+  border: none;
+  border-radius: $button-border-radius;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.active {
+    background-color: $active-color;  // 활성화 상태일 때 배경 색
+  }
+}

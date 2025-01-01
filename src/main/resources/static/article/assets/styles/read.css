@@ -373,4 +373,19 @@
   display: flex;
 }
 
+.favorite-btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.favorite-btn:hover {
+  opacity: 0.8;
+}
+.favorite-btn.active {
+  background-color: #f44336;
+}
+
 /*# sourceMappingURL=read.css.map */

@@ -23,6 +23,7 @@ public class BoardPostEntity {
     private LocalDateTime updateAt;
     private LocalDateTime deletedAt;
     private int view;
+    private int likesCount;
 
 //    private UserEntity user;
 }

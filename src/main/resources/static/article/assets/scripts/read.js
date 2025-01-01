@@ -158,9 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         $modifyButton.textContent = '수정';
         $modifyButton.addEventListener('click', () => {
             closeOpenForms();
-            // 기존 댓글 내용 숨기기
-            // $contentDiv.style.display = 'none';
-            // $actionContainer.style.display = 'none';
+            $replyForm.style.display = 'none';
+            // 수정폼 생성 후 답글폼 닫기
 
             // 수정 폼 생성 후 댓글 아래에 삽입
             const $modifyForm = createModifyForm(comment.index, comment.comment, $contentDiv, $actionContainer, $commentItem);
@@ -190,6 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 수정 폼 생성
     const createModifyForm = (commentIndex, currentContent, $contentDiv, $actionContainer, $commentItem) => {
+        closeOpenForms();
+
         const existingModifyForm = $commentItem.querySelector('.form.modify');
         if (existingModifyForm) {
             existingModifyForm.remove();
@@ -270,7 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const openModifyForm = document.querySelector('.form.modify');
         if (openModifyForm) {
             openModifyForm.remove();
-
         }
 
         const openReplyForm = document.querySelector('.form.reply');

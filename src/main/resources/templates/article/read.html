@@ -31,8 +31,10 @@
         //     history.back();
         // });
     </script>
+    <script defer type="text/javascript" src="/common/assets/scripts/Like.js"></script>
     <script defer src="/article/assets/scripts/read.js" type="text/javascript"
             th:if="${article != null && article.getDeletedAt() == null}"></script>
+
 </head>
 <body th:if="${article != null && article.getDeletedAt() == null}">
 <div th:insert="~{common/common.html :: header_copy}"></div>
@@ -55,7 +57,7 @@
                 <a class="meta"
                    th:text="'작성자: ' + ${article.getUserNickname()} + ' | 작성일: ' + ${#temporals.format(article.getCreatedAt, 'yyyy-MM-dd')} + ' | 조회수: ' + ${article.getView()}">>작성자:
                     사용자 | 작성일: 2024-12-06 | 조회수: 123</a>
-                <div class="like-container" data-festival-id="79" data-user-email="yellow077@naver.com">
+                <div class="like-container" th:data-board-id="${article.getIndex()}" th:data-user-email="${email}">
                     <button class="like" name="like" type="button">
                         <img th:src="@{/article/assets/images/like-false.png}" alt="좋아요" class="icon">
                     </button>

@@ -33,4 +33,25 @@ public interface BoardPostMapper {
     BoardPostEntity selectBoardPostsByIndex(@Param("index") int index);
 
     int updateBoardPost(BoardPostEntity board);
+
+//    // 좋아요 수 증가
+//    int incrementLikeCount(@Param("postId") int postId);
+//
+//    // 좋아요 수 감소 (추가 요구 시 사용)
+//    int decrementLikeCount(@Param("postId") int postId);
+//
+//    // 게시물 조회
+//    BoardPostEntity selectPostById(@Param("postId") int postId);
+
+    // 좋아요 추가
+    int addLike(@Param("postId") int postId, @Param("userEmail") String userEmail);
+
+    // 좋아요 삭제
+    int removeLike(@Param("postId") int postId, @Param("userEmail") String userEmail);
+
+    // 좋아요 수 증가
+    int incrementLikeCount(@Param("postId") int postId);
+
+    // 좋아요 수 감소
+    int decrementLikeCount(@Param("postId") int postId);
 }
