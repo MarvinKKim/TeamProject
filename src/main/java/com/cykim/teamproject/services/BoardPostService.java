@@ -48,6 +48,11 @@ public class BoardPostService {
         // 로그인된 사용자의 이메일을 가져옴
         String userEmail = getLoggedInUserEmail();
 
+        // 이미 좋아요 상태인지 확인
+        if (boardPostMapper.isLiked(postId, userEmail)) {
+            return false; // 중복 삽입 방지
+        }
+
         int insertedRows = boardPostMapper.addLike(postId, userEmail);
         if (insertedRows > 0) {
             boardPostMapper.incrementLikeCount(postId);
@@ -61,12 +66,25 @@ public class BoardPostService {
         // 로그인된 사용자의 이메일을 가져옴
         String userEmail = getLoggedInUserEmail();
 
+        // 이미 좋아요 상태인지 확인
+        if (!boardPostMapper.isLiked(postId, userEmail)) {
+            return false; // 중복 삽입 방지
+        }
+
         int deletedRows = boardPostMapper.removeLike(postId, userEmail);
         if (deletedRows > 0) {
             boardPostMapper.decrementLikeCount(postId);
             return true;
         }
         return false;
+    }
+
+    public boolean isLiked(int postId, String userEmail) {
+        return boardPostMapper.isLiked(postId, userEmail);
+    }
+
+    public int getLikeCount(int postId) {
+        return boardPostMapper.getLikeCount(postId);
     }
 
     public List<BoardPostEntity> getPostsByUserEmail(String userEmail, PageVo pageVo) {

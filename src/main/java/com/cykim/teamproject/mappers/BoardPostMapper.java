@@ -34,15 +34,6 @@ public interface BoardPostMapper {
 
     int updateBoardPost(BoardPostEntity board);
 
-//    // 좋아요 수 증가
-//    int incrementLikeCount(@Param("postId") int postId);
-//
-//    // 좋아요 수 감소 (추가 요구 시 사용)
-//    int decrementLikeCount(@Param("postId") int postId);
-//
-//    // 게시물 조회
-//    BoardPostEntity selectPostById(@Param("postId") int postId);
-
     // 좋아요 추가
     int addLike(@Param("postId") int postId, @Param("userEmail") String userEmail);
 
@@ -54,4 +45,8 @@ public interface BoardPostMapper {
 
     // 좋아요 수 감소
     int decrementLikeCount(@Param("postId") int postId);
+
+    int getLikeCount(@Param("postId") int postId);
+
+    boolean isLiked(@Param("postId") int postId, @Param("userEmail") String userEmail);
 }

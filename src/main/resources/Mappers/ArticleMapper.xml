@@ -21,7 +21,8 @@
                `create_at` AS `createdAt`,
                `update_at` AS `updateAt`,
                `deleted_at` AS `deletedAt`,
-               `view` AS `view`
+               `view` AS `view`,
+               `like_count` AS `likesCount`
         FROM `fave`.`board_posts`
         WHERE `index` = #{index}
         LIMIT 1
@@ -70,6 +71,7 @@
                `update_at` AS `updateAt`,
                `deleted_at` AS `deletedAt`,
                `view` AS `view`,
+               `like_count` AS `likesCount`,
                (SELECT COUNT(*) FROM `fave`.`board_comments` WHERE `post_id` = `fave`.`board_posts`.`index` AND `is_deleted` IS NULL) AS `comment_count`
         FROM `fave`.`board_posts`
         WHERE `deleted_at` IS NULL
@@ -87,6 +89,7 @@
                `update_at` AS `updateAt`,
                `deleted_at` AS `deletedAt`,
                `view` AS `view`,
+               `like_count` AS `likesCount`,
                (SELECT COUNT(*) FROM `fave`.`board_comments` WHERE `post_id` = `fave`.`board_posts`.`index` AND `is_deleted` IS NULL) AS `commentCount`
         FROM `fave`.`board_posts`
         WHERE `deleted_at` IS NULL
@@ -111,6 +114,7 @@
         `update_at` AS `updateAt`,
         `deleted_at` AS `deletedAt`,
         `view` AS `view`,
+        `like_count` AS `likesCount`,
         (SELECT COUNT(*)
          FROM `fave`.`board_comments`
          WHERE `post_id` = `fave`.`board_posts`.`index`

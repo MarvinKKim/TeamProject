@@ -67,6 +67,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -96,5 +99,23 @@ public class BoardPostController {
         }
         boolean result = boardPostService.removeLike(postId); // 서비스가 로그인된 사용자 이메일을 처리
         return result ? LikedResult.SUCCESS : LikedResult.NOT_LIKED;
+    }
+
+    // 초기 UI 상태 반환
+    @GetMapping("/status/{postId}")
+    public Map<String, Object> getPostLikeStatus(@PathVariable("postId") int postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName(); // 로그인된 사용자의 이메일
+        boolean isLiked = false;
+        if (userEmail != null) {
+            isLiked = boardPostService.isLiked(postId, userEmail);
+        }
+        int likeCount = boardPostService.getLikeCount(postId);
+
+        // 응답 데이터 구성
+        Map<String, Object> response = new HashMap<>();
+        response.put("isLiked", isLiked);
+        response.put("likeCount", likeCount);
+        return response;
     }
 }
